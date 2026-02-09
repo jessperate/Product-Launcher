@@ -3,119 +3,145 @@ import { useState } from "react";
 const TIER_DATA = {
   1: {
     name: "Tier 1",
-    label: "Major Narrative / Category Launch",
+    label: "Category-Defining Launch",
     color: "#7C3AED",
     bgColor: "#7C3AED15",
     borderColor: "#7C3AED40",
-    cadence: "1-2 per year",
-    definition: "Category-defining launches or major product layers. Highest orchestration.",
-    channels: ["Slack (#product-announcements)", "Customer Slack", "Email", "LinkedIn", "X", "Press", "Homepage banner", "Product landing page"],
-    deliverables: ["Narrative + messaging doc", "Launch video", "Blog post", "Sales deck", "Launch email", "Demo flows", "Press exclusive", "1 hero customer story + stats"],
-    audiences: ["Internal All", "Builders", "Sales", "Customers (Builders & Non)", "Prospects"],
-    leadTime: "GTM teams need 3-4 weeks. PR/Comms needs 2-3 weeks for press exclusive.",
-    pricingRollout: ["Define pricing model and packaging changes (if any)", "Coordinate with Sales on new pricing talk tracks", "Prepare rollout phases: internal beta > customer beta > GA", "Align with Product on feature gating and plan tiers", "Document rollout timeline and approval from Alex"],
-    mrd: ["Create MRD in Notion using standard template", "Include: problem statement, target persona, success metrics, competitive positioning", "Add customer evidence and reference stories", "Include pricing/packaging recommendations", "Route to Alex for final approval", "Link approved MRD to launch tracker"],
-    enablement: ["Sales enablement deck with talk tracks", "Demo script and recorded demo flow", "Customer-facing one-pager", "Internal FAQ document", "Competitive battle card updates", "CX/Builders live training session", "Sales live training session"],
-    marketingBom: ["Press exclusive pitch and embargo coordination", "Blog post (long-form narrative)", "Launch video (hero asset)", "Product landing page", "Homepage banner", "Email campaign (customers + prospects)", "LinkedIn posts (company + exec social)", "X posts", "Customer Slack announcement", "Internal Slack announcement (#product-announcements)", "Customer story / case study", "Paid ads (if applicable)", "OOH or event activation (if applicable)"],
+    cadence: "1/Quarter",
+    definition: "Category-defining launches or major product layers (e.g., AirOps Next, Content Refresh).",
+    examples: "AirOps Next, Content Refresh",
+    leadTime: "Product deliverables due 1 week ahead. Marketing needs 3-4 weeks.",
+    productDeliverables: [
+      "Post in #0-product-announcements",
+      "Update internal.airops.com with all materials",
+      "Sales Demo plan (workspace with feature enabled for Sales to use)",
+      "Live Demo on CX Standup",
+      "Live Demo on Sales Standup",
+      "MRD (must include Loom Demo Video)",
+      "FAQs Notion Doc",
+      "Pricing documentation",
+      "Announce at All Hands 1x",
+      "Announce at All Hands 2x (pre and post)",
+    ],
+    marketingDeliverables: [
+      "Sales talk track / materials",
+      "Update external Changelog",
+      "Own Slack message draft, Blog, email, and coordinate with CX for Slack sharing with customers",
+      "Social media posts",
+      "Employee amplification guide",
+      "Post in #0-general",
+      "Customer Proof Points",
+      "Support Talk Track",
+      "Webinar",
+    ],
+    postLaunchProduct: [
+      "Metabase dashboard to track usage and health of the feature (initial set up by launch day; ongoing monitoring post-launch)",
+    ],
+    postLaunchMarketing: [
+      "In product banner / education (define copy + audience; use Intercom to self-serve)",
+      "1 month post-launch: Success Stories / Case Studies",
+      "Work with CX to pick customers to do live demo during customer standup",
+    ],
   },
   2: {
     name: "Tier 2",
-    label: "Feature Family / Workflow / Beta Launch",
+    label: "Significant Features / Feature Set",
     color: "#2563EB",
     bgColor: "#2563EB15",
     borderColor: "#2563EB40",
-    cadence: "~2 per quarter",
-    definition: "Strong value; bundled capability story (e.g., Page360, Offsite, MCP).",
-    channels: ["Slack", "Standup demos", "Customer Slack", "Email", "LinkedIn", "Blog", "Website updates"],
-    deliverables: ["Short narrative", "Loom demo", "Blog post", "Enablement one-pager", "GIF + static images", "Press (targeted)"],
-    audiences: ["Internal All", "Builders", "Sales", "Customers (Builders & Non)", "Prospects"],
-    leadTime: "GTM teams need 2 weeks. PR/Comms needs ~2 weeks for embargo.",
-    pricingRollout: ["Confirm pricing implications (if bundled or new capability)", "Define rollout: beta > GA timeline", "Coordinate with CX on customer rollout communication", "Update pricing page or feature comparison if needed"],
-    mrd: ["Create MRD in Notion using standard template", "Include: feature overview, use cases, target audience, success metrics", "Add demo talking points", "Route to Alex for approval", "Link approved MRD to launch tracker"],
-    enablement: ["Enablement one-pager", "Loom demo recording", "Standup demo for Sales + CX/Builders", "Internal FAQ (lightweight)", "Updated sales deck slide(s)"],
-    marketingBom: ["Blog post", "Loom demo", "GIF + static images for social", "LinkedIn posts (company + exec social)", "Email to customers", "Customer Slack announcement", "Internal Slack announcement (#product-announcements)", "Website updates (feature page, docs)", "Press/embargo outreach (if applicable)"],
+    cadence: "1-2/Month",
+    definition: "Significant features or set of features (e.g., MCP, Offsite, Page360, Collaboration).",
+    examples: "MCP, Offsite, Page360, Collaboration",
+    leadTime: "Product deliverables due 1 week ahead. Marketing needs 2 weeks.",
+    productDeliverables: [
+      "Post in #0-product-announcements",
+      "Update internal.airops.com with all materials",
+      "Sales Demo plan (workspace with feature enabled for Sales to use)",
+      "Live Demo on CX Standup",
+      "Live Demo on Sales Standup",
+      "MRD (must include Loom Demo Video)",
+      "FAQs Notion Doc",
+      "Pricing documentation",
+      "Announce at All Hands 1x",
+    ],
+    marketingDeliverables: [
+      "Sales talk track / materials",
+      "Update external Changelog",
+      "Own Slack message draft, Blog, email, and coordinate with CX for Slack sharing with customers",
+      "Social media posts",
+      "Employee amplification guide",
+      "Post in #0-general",
+      "Customer Proof Points",
+      "Support Talk Track",
+    ],
+    postLaunchProduct: [
+      "Metabase dashboard to track usage and health of the feature (initial set up by launch day; ongoing monitoring post-launch)",
+    ],
+    postLaunchMarketing: [
+      "In product banner / education (define copy + audience; use Intercom to self-serve)",
+      "1 month post-launch: Success Stories / Case Studies",
+      "Work with CX to pick customers to do live demo during customer standup",
+    ],
   },
   3: {
     name: "Tier 3",
-    label: "QoL Enhancements / Fast Follows",
+    label: "Small but Valuable Improvements",
     color: "#059669",
     bgColor: "#05966915",
     borderColor: "#05966940",
-    cadence: "Weekly",
-    definition: "Small but valuable improvements that signal momentum.",
-    channels: ["Slack (#product-announcements)", "Standup callout", "Changelog", "Customer Slack"],
-    deliverables: ["One-liner", "Screenshot", "GIF", "Changelog entry"],
-    audiences: ["Internal All", "Builders", "Sales", "Customers (Builders)"],
-    leadTime: "Minimal. Can be planned on an ongoing basis for monthly roundups.",
-    pricingRollout: ["No pricing changes expected", "Ship as part of existing plan tiers", "Confirm no gating changes needed"],
-    mrd: ["Lightweight brief in Notion (can be part of sprint notes)", "Include: what changed, who it impacts, expected behavior", "Alex approval not required (PMM discretion)"],
-    enablement: ["Changelog entry", "Screenshot or GIF", "One-liner description for standup callout"],
-    marketingBom: ["Changelog entry", "Screenshot / GIF", "Internal Slack post (#product-announcements)", "Customer Slack post (builder channels)", "Bundle into monthly feature roundup for social", "Standup callout"],
-  },
-  4: {
-    name: "Tier 4",
-    label: "Bug Fixes / UI Adjustments",
-    color: "#6B7280",
-    bgColor: "#6B728015",
-    borderColor: "#6B728040",
-    cadence: "As shipped",
-    definition: "Minor polish and issue resolution. Optional to include in comms.",
-    channels: ["Slack (#product-announcements)"],
-    deliverables: ["Changelog line", "Optional screenshot"],
-    audiences: ["Internal All", "Builders"],
-    leadTime: "None. Ship and note.",
-    pricingRollout: ["No pricing or rollout considerations"],
-    mrd: ["No MRD needed", "Document in sprint notes or changelog"],
-    enablement: ["Changelog line", "Optional screenshot if UI changed"],
-    marketingBom: ["Changelog line", "Internal Slack post (optional)", "Bundle into monthly feature roundup (optional)"],
+    cadence: "As shipped; Roundup 1/Month",
+    definition: "Small but valuable improvements (e.g., Suggestion Mode, Prompt Tags, WordPress Grid Integration, Favorites).",
+    examples: "Suggestion Mode, Prompt Tags, WordPress Grid Integration, Favorites",
+    leadTime: "Minimal. Individual features shipped as ready; bundled into monthly roundup.",
+    productDeliverables: [
+      "Post in #0-product-announcements",
+      "Update internal.airops.com with all materials",
+      "Sales Demo plan (workspace with feature enabled for Sales to use)",
+      "Live Demo on CX Standup (OPTIONAL)",
+      "Live Demo on Sales Standup (OPTIONAL)",
+    ],
+    marketingDeliverables: [
+      "Sales talk track / materials",
+      "Update external Changelog",
+      "[ROUNDUPS] Own Slack message draft, Blog, email, and coordinate with CX for Slack sharing with customers",
+    ],
+    postLaunchProduct: [
+      "Metabase dashboard to track usage and health of the feature (initial set up by launch day; ongoing monitoring post-launch)",
+    ],
+    postLaunchMarketing: [
+      "In product banner / education (define copy + audience; use Intercom to self-serve)",
+    ],
   },
 };
 
-const TIERING_CONTEXT = `You are a product marketing expert at AirOps. Analyze this MRD (Market Requirements Document) and determine the correct launch tier.
+const TIERING_CONTEXT = `You are a senior product marketing expert at AirOps. Analyze this MRD (Market Requirements Document) and recommend the best launch tier (1, 2, or 3). You MUST recommend exactly one tier and explain why.
 
-TIERING FRAMEWORK:
-- Tier 1 (Major Narrative / Category Launch): Category-defining launches or major product layers. Highest orchestration. Happens 1-2/year. Requires press exclusive, launch video, sales deck, hero customer story. GTM needs 3-4 weeks.
-- Tier 2 (Feature Family / Workflow / Beta Launch): Strong value; bundled capability story. Happens ~2/quarter. Requires Loom demo, blog, enablement one-pager, targeted press. GTM needs 2 weeks.
-- Tier 3 (QoL Enhancements / Fast Follows): Small but valuable improvements that signal momentum. Weekly cadence. Requires changelog entry, screenshot/GIF, one-liner. Goes in monthly feature roundups.
-- Tier 4 (Bug Fixes / UI Adjustments): Minor polish and issue resolution. As shipped. Changelog line, optional screenshot.
+TIERING FRAMEWORK (from AirOps Launch Tier Requirements):
 
-KEY DECISION FACTORS:
-1. Scope: Does this create a new category, bundle features, improve existing ones, or fix bugs?
-2. Narrative: Does this change how AirOps talks to the market?
-3. Audience breadth: Everyone including press, or just internal/builders?
-4. Press worthiness: Would journalists care?
-5. Enablement needs: Full sales deck or just a screenshot?
-6. Frequency: How often do launches like this happen?
+- Tier 1 (Category-Defining Launch): Category-defining launches or major product layers. Cadence: 1/Quarter. Examples: AirOps Next, Content Refresh. These are the biggest launches that redefine how AirOps talks to the market. Requires everything in Tier 2 PLUS: All Hands announcement 2x (pre and post), Webinar. Full enablement stack including MRD with Loom demo, FAQs doc, pricing, sales demo plan, CX + Sales standups, employee amplification, customer proof points, social media, and post-launch success stories.
 
-Also provide a rich strategic analysis that goes beyond just the tier. Think like a senior PMM and identify:
+- Tier 2 (Significant Features / Feature Set): Significant features or set of features. Cadence: 1-2/Month. Examples: MCP, Offsite, Page360, Collaboration. Strong value with a compelling bundled story. Requires everything in Tier 3 PLUS: MRD (must include Loom Demo Video), FAQs Notion Doc, Pricing, All Hands announcement 1x, Social media posts, Employee amplification guide, Post in #0-general, Customer Proof Points, Support Talk Track. Post-launch: Success Stories/Case Studies at 1 month, customer live demos during standup.
+
+- Tier 3 (Small but Valuable Improvements): Small but valuable improvements. Cadence: As shipped for individual features; Roundup 1/Month. Examples: Suggestion Mode, Prompt Tags, WordPress Grid Integration, Favorites. Requires: Post in #0-product-announcements, Update internal.airops.com, Sales Demo plan, CX/Sales standup demos (optional), Sales talk track/materials, Update external Changelog. Roundups: Own Slack message draft, Blog, email, coordinate with CX for customer sharing. Post-launch: Metabase dashboard, in-product education via Intercom.
+
+HOW TO DECIDE THE TIER - evaluate these factors and explain your thinking:
+1. SCOPE: Is this a category-defining moment (Tier 1), a significant new feature or feature set (Tier 2), or a small but valuable improvement (Tier 3)?
+2. CADENCE FIT: Does this happen roughly quarterly (Tier 1), monthly (Tier 2), or on an ongoing/weekly basis (Tier 3)?
+3. ENABLEMENT NEEDS: Does this need a webinar + full All Hands (Tier 1), MRD with Loom demo + FAQs + pricing docs (Tier 2), or just a changelog update + sales talk track (Tier 3)?
+4. MARKETING WEIGHT: Does this warrant a full external campaign with customer proof points + employee amplification + social (Tier 1/2), or is it best bundled into a monthly roundup (Tier 3)?
+5. POST-LAUNCH: Does this need success stories and customer demos at 1 month (Tier 1/2), or just usage tracking and in-product education (Tier 3)?
+
+IMPORTANT: Your reasoning should be specific and reference the actual MRD content. Don't be generic. Explain exactly which signals in the MRD drove your tier recommendation and why the adjacent tiers are not the right fit. For example: "This is Tier 2 rather than Tier 1 because while it's a significant new capability, it doesn't redefine the category or warrant a webinar. It's above Tier 3 because it requires its own MRD, pricing documentation, and customer proof points."
+
+Also provide a rich strategic analysis. Think like a senior PMM:
 - GTM OPPORTUNITIES: Co-marketing with partners/customers, creative campaign angles, event tie-ins, analyst briefings, community activations, competitive moments
 - NARRATIVE ANGLES: How this strengthens AirOps' category story, what makes this unique vs competitors, what trend or market shift this taps into
 - CREATIVE HOOKS: Social-first ideas, visual storytelling opportunities, demo moments that would land well, surprise/delight angles
 - RISKS OR WATCHOUTS: Dependencies, timing conflicts, messaging pitfalls, audience confusion
 
 Respond ONLY with valid JSON (no markdown, no backticks):
-{"tier": 1, "featureName": "extracted feature name", "reasoning": "2-3 sentence explanation of why this tier", "signals": ["signal 1", "signal 2", "signal 3"], "gtmOpportunities": ["opportunity 1 - be specific and actionable", "opportunity 2"], "narrativeAngles": ["angle 1 - tie to market context", "angle 2"], "creativeHooks": ["hook 1 - specific campaign or content idea", "hook 2"], "risks": ["risk 1", "risk 2"]}`;
+{"tier": 1, "featureName": "extracted feature name", "reasoning": "3-4 sentence explanation of why this tier and not the adjacent tiers, referencing specific MRD content", "signals": ["signal 1", "signal 2", "signal 3"], "gtmOpportunities": ["opportunity 1 - be specific and actionable", "opportunity 2"], "narrativeAngles": ["angle 1 - tie to market context", "angle 2"], "creativeHooks": ["hook 1 - specific campaign or content idea", "hook 2"], "risks": ["risk 1", "risk 2"]}`;
 
-const NOTION_FETCH_PROMPT = `You have access to a Notion MCP server. The user wants you to fetch the content of a Notion page and then analyze it to determine a launch tier.
-
-First, fetch the page content. Then analyze it using this tiering framework:
-
-TIERING FRAMEWORK:
-- Tier 1 (Major Narrative / Category Launch): Category-defining launches or major product layers. Highest orchestration. Happens 1-2/year. Requires press exclusive, launch video, sales deck, hero customer story. GTM needs 3-4 weeks.
-- Tier 2 (Feature Family / Workflow / Beta Launch): Strong value; bundled capability story. Happens ~2/quarter. Requires Loom demo, blog, enablement one-pager, targeted press. GTM needs 2 weeks.
-- Tier 3 (QoL Enhancements / Fast Follows): Small but valuable improvements that signal momentum. Weekly cadence. Requires changelog entry, screenshot/GIF, one-liner. Goes in monthly feature roundups.
-- Tier 4 (Bug Fixes / UI Adjustments): Minor polish and issue resolution. As shipped. Changelog line, optional screenshot.
-
-KEY DECISION FACTORS:
-1. Scope: Does this create a new category, bundle features, improve existing ones, or fix bugs?
-2. Narrative: Does this change how AirOps talks to the market?
-3. Audience breadth: Everyone including press, or just internal/builders?
-4. Press worthiness: Would journalists care?
-5. Enablement needs: Full sales deck or just a screenshot?
-6. Frequency: How often do launches like this happen?
-
-After fetching and analyzing, respond ONLY with valid JSON (no markdown, no backticks):
-{"tier": 1, "featureName": "extracted feature name", "reasoning": "2-3 sentence explanation of why this tier", "signals": ["signal 1", "signal 2", "signal 3"], "gtmOpportunities": ["opportunity 1 - be specific and actionable", "opportunity 2"], "narrativeAngles": ["angle 1 - tie to market context", "angle 2"], "creativeHooks": ["hook 1 - specific campaign or content idea", "hook 2"], "risks": ["risk 1", "risk 2"]}`;
 
 const isNotionUrl = (text) => {
   const t = text.trim();
@@ -212,13 +238,18 @@ function StrategicSection({ icon, title, items, accentColor }) {
   );
 }
 
-function ExportToNotion({ tier, featureName, reasoning, signals, gtmOpportunities, narrativeAngles, creativeHooks, risks, data, steps }) {
+function ExportToNotion({ tier, featureName, reasoning, signals, gtmOpportunities, narrativeAngles, creativeHooks, risks, originalMrd, data, steps }) {
   const [exporting, setExporting] = useState(false);
   const [exported, setExported] = useState(null);
   const [exportError, setExportError] = useState(null);
 
   const buildMarkdown = () => {
     let md = "";
+    if (originalMrd) {
+      md += `## Original MRD\n\n`;
+      md += `${originalMrd}\n\n`;
+      md += `---\n\n`;
+    }
     md += `> **${data.name} - ${data.label}** | Cadence: ${data.cadence}\n\n`;
     md += `${data.definition}\n\n`;
 
@@ -248,9 +279,8 @@ function ExportToNotion({ tier, featureName, reasoning, signals, gtmOpportunitie
     md += `---\n\n`;
     md += `## Launch Details\n\n`;
     md += `**Lead Time:** ${data.leadTime}\n\n`;
-    md += `**Channels:** ${data.channels.join(", ")}\n\n`;
-    md += `**Audiences:** ${data.audiences.join(", ")}\n\n`;
-    md += `**Core Deliverables:** ${data.deliverables.join(", ")}\n\n`;
+    md += `**Cadence:** ${data.cadence}\n\n`;
+    md += `**Examples:** ${data.examples}\n\n`;
 
     md += `---\n\n`;
     steps.forEach((step, i) => {
@@ -267,53 +297,21 @@ function ExportToNotion({ tier, featureName, reasoning, signals, gtmOpportunitie
     setExportError(null);
     try {
       const content = buildMarkdown();
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/notion-export", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 2000,
-          messages: [{
-            role: "user",
-            content: `Create a Notion page with this exact title: "${featureName} - Launch Plan (${TIER_DATA[tier].name})"
-
-Use the create-pages tool to create the page with no parent (workspace level). The content should be this markdown:
-
-${content}
-
-After creating the page, respond ONLY with valid JSON (no markdown, no backticks):
-{"success": true, "url": "the notion page url"}
-
-If you cannot create the page, respond with:
-{"success": false, "error": "description of what went wrong"}`
-          }],
-          mcp_servers: [{ type: "url", url: "https://mcp.notion.com/mcp", name: "notion-mcp" }],
+          title: `${featureName} - Launch Plan (${TIER_DATA[tier].name})`,
+          markdown: content,
         }),
       });
 
       const resData = await response.json();
-      const allText = resData.content
-        ?.filter((b) => b.type === "text")
-        .map((b) => b.text)
-        .join("\n") || "";
-      const toolResults = resData.content
-        ?.filter((b) => b.type === "mcp_tool_result")
-        .map((b) => b.content?.[0]?.text || "")
-        .join("\n") || "";
-      const combined = allText + "\n" + toolResults;
 
-      const urlMatch = combined.match(/https:\/\/www\.notion\.so\/[^\s"')}\]]+/);
-      const jsonMatch = combined.match(/\{[\s\S]*?"success"[\s\S]*?\}/);
-
-      if (urlMatch) {
-        setExported(urlMatch[0]);
-      } else if (jsonMatch) {
-        const parsed = JSON.parse(jsonMatch[0]);
-        if (parsed.success && parsed.url) {
-          setExported(parsed.url);
-        } else {
-          setExportError(parsed.error || "Could not create the Notion page.");
-        }
+      if (!response.ok) {
+        setExportError(resData.error || "Could not create the Notion page.");
+      } else if (resData.success && resData.url) {
+        setExported(resData.url);
       } else {
         setExported("created");
       }
@@ -416,7 +414,7 @@ function AnalysisCard({ reasoning, signals, tier, onOverride, gtmOpportunities, 
       {/* Override */}
       <div style={{ padding: "12px 20px", borderTop: "1px solid #F3F4F6", fontSize: 13, color: "#6B7280" }}>
         Not the right tier?{" "}
-        {[1, 2, 3, 4].filter((t) => t !== tier).map((t) => (
+        {[1, 2, 3].filter((t) => t !== tier).map((t) => (
           <button key={t} onClick={() => onOverride(t)} style={{ background: "none", border: "none", color: TIER_DATA[t].color, fontWeight: 600, cursor: "pointer", fontSize: 13, padding: "0 4px", textDecoration: "underline" }}>
             Tier {t}
           </button>
@@ -426,13 +424,13 @@ function AnalysisCard({ reasoning, signals, tier, onOverride, gtmOpportunities, 
   );
 }
 
-function Results({ tier, featureName, reasoning, signals, gtmOpportunities, narrativeAngles, creativeHooks, risks, onReset, onOverride }) {
+function Results({ tier, featureName, reasoning, signals, gtmOpportunities, narrativeAngles, creativeHooks, risks, originalMrd, onReset, onOverride }) {
   const data = TIER_DATA[tier];
   const steps = [
-    { title: "Pricing & Rollout Strategy", desc: "Define pricing implications and rollout phases.", items: data.pricingRollout },
-    { title: "MRD Creation", desc: "Create and get approval on the Market Requirements Document in Notion.", items: data.mrd },
-    { title: "Enablement Collateral", desc: "Build the materials teams need to talk about this launch.", items: data.enablement },
-    { title: "Marketing & Brand Activation", desc: "Execute the Bill of Materials for this tier.", items: data.marketingBom },
+    { title: "Product Deliverables", desc: "Product deliverables due 1 week ahead of launch.", items: data.productDeliverables },
+    { title: "Marketing Deliverables", desc: "Marketing deliverables to drive enablement pre- and during launch.", items: data.marketingDeliverables },
+    { title: "Post-Launch: Product", desc: "Product deliverables to drive adoption after launch.", items: data.postLaunchProduct },
+    { title: "Post-Launch: Marketing", desc: "Marketing deliverables to drive adoption after launch.", items: data.postLaunchMarketing },
   ];
   const [checkedState, setCheckedState] = useState(steps.map((s) => s.items.map(() => false)));
   const toggleItem = (si, ii) => {
@@ -465,6 +463,7 @@ function Results({ tier, featureName, reasoning, signals, gtmOpportunities, narr
         narrativeAngles={narrativeAngles}
         creativeHooks={creativeHooks}
         risks={risks}
+        originalMrd={originalMrd}
         data={data}
         steps={steps}
       />
@@ -472,8 +471,8 @@ function Results({ tier, featureName, reasoning, signals, gtmOpportunities, narr
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12, marginBottom: 24 }}>
         {[
           { label: "Lead Time", val: data.leadTime },
-          { label: "Channels", val: data.channels.join(", ") },
-          { label: "Audiences", val: data.audiences.join(", ") },
+          { label: "Cadence", val: data.cadence },
+          { label: "Examples", val: data.examples },
         ].map((c, i) => (
           <div key={i} style={{ padding: "14px 16px", borderRadius: 10, background: "#F9FAFB", border: "1px solid #F3F4F6" }}>
             <div style={{ fontSize: 12, color: "#6B7280", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>{c.label}</div>
@@ -535,11 +534,10 @@ export default function App() {
   };
 
   const analyzeText = async () => {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch("/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
         max_tokens: 1000,
         messages: [{ role: "user", content: `${TIERING_CONTEXT}\n\nHere is the MRD to analyze:\n\n${input}` }],
       }),
@@ -548,41 +546,27 @@ export default function App() {
   };
 
   const analyzeNotionUrl = async () => {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    // Fetch page content via Notion API
+    const fetchRes = await fetch("/api/notion-fetch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: input }),
+    });
+    const fetchData = await fetchRes.json();
+    if (!fetchRes.ok) {
+      throw new Error(fetchData.error || "Failed to fetch Notion page");
+    }
+
+    // Analyze fetched content with Claude
+    const response = await fetch("/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 4000,
-        messages: [{ role: "user", content: `Fetch this Notion page and analyze its content to determine the launch tier:\n\n${input}\n\n${NOTION_FETCH_PROMPT}` }],
-        mcp_servers: [{ type: "url", url: "https://mcp.notion.com/mcp", name: "notion-mcp" }],
+        max_tokens: 1000,
+        messages: [{ role: "user", content: `${TIERING_CONTEXT}\n\nHere is the MRD content fetched from Notion:\n\n${fetchData.content}` }],
       }),
     });
-    const data = await response.json();
-
-    const textBlocks = data.content?.filter((b) => b.type === "text").map((b) => b.text).join("\n") || "";
-    const toolResults = data.content?.filter((b) => b.type === "mcp_tool_result").map((b) => b.content?.[0]?.text || "").join("\n") || "";
-    const allText = textBlocks + "\n" + toolResults;
-
-    const jsonMatch = allText.match(/\{[\s\S]*?"tier"[\s\S]*?\}/);
-    if (jsonMatch) {
-      return JSON.parse(jsonMatch[0]);
-    }
-
-    if (toolResults.length > 100) {
-      const analysisResponse = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          messages: [{ role: "user", content: `${TIERING_CONTEXT}\n\nHere is the MRD content fetched from Notion:\n\n${toolResults}` }],
-        }),
-      });
-      return parseResult(await analysisResponse.json());
-    }
-
-    throw new Error("Could not fetch or analyze Notion page content.");
+    return parseResult(await response.json());
   };
 
   const handleAnalyze = async () => {
@@ -631,6 +615,7 @@ export default function App() {
           narrativeAngles={result.narrativeAngles}
           creativeHooks={result.creativeHooks}
           risks={result.risks}
+          originalMrd={input}
           onReset={() => { setInput(""); setResult(null); setError(null); }}
           onOverride={(t) => setResult((p) => ({ ...p, tier: t }))}
         />
@@ -723,7 +708,7 @@ export default function App() {
       <div style={{ marginTop: 32, padding: "20px", borderRadius: 12, background: "#F9FAFB", border: "1px solid #F3F4F6" }}>
         <div style={{ fontSize: 13, fontWeight: 600, color: "#6B7280", marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Tier Overview</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {[1, 2, 3, 4].map((t) => {
+          {[1, 2, 3].map((t) => {
             const d = TIER_DATA[t];
             return (
               <div key={t} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
