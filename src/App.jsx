@@ -424,6 +424,26 @@ function AnalysisCard({ reasoning, signals, tier, onOverride, gtmOpportunities, 
   );
 }
 
+function CopyLinkButton({ result }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    const shareUrl = buildShareUrl(result);
+    navigator.clipboard.writeText(shareUrl || window.location.href).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+  return (
+    <button onClick={handleCopy} style={{ padding: "8px 16px", borderRadius: 8, border: "1px solid #E5E7EB", background: copied ? "#F0FDF4" : "#fff", cursor: "pointer", fontSize: 13, color: copied ? "#059669" : "#6B7280", fontWeight: 500, display: "flex", alignItems: "center", gap: 6, transition: "all 0.15s" }}>
+      {copied ? (
+        <><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Copied!</>
+      ) : (
+        <><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M5 2H11C12.1 2 13 2.9 13 4V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><rect x="3" y="4" width="8" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.5"/></svg> Copy link</>
+      )}
+    </button>
+  );
+}
+
 function Results({ tier, featureName, reasoning, signals, gtmOpportunities, narrativeAngles, creativeHooks, risks, originalMrd, onReset, onOverride }) {
   const data = TIER_DATA[tier];
   const steps = [
@@ -451,7 +471,10 @@ function Results({ tier, featureName, reasoning, signals, gtmOpportunities, narr
           <h1 style={{ fontSize: 26, fontWeight: 700, color: "#111", margin: "8px 0 4px" }}>{featureName || "Your Launch"}</h1>
           <p style={{ fontSize: 15, color: "#6B7280", margin: 0, maxWidth: 520, lineHeight: 1.5 }}>{data.label} -- {data.definition}</p>
         </div>
-        <button onClick={onReset} style={{ padding: "8px 16px", borderRadius: 8, border: "1px solid #E5E7EB", background: "#fff", cursor: "pointer", fontSize: 13, color: "#6B7280", fontWeight: 500 }}>Start over</button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <CopyLinkButton result={{ tier, featureName, reasoning, signals, gtmOpportunities, narrativeAngles, creativeHooks, risks }} />
+          <button onClick={onReset} style={{ padding: "8px 16px", borderRadius: 8, border: "1px solid #E5E7EB", background: "#fff", cursor: "pointer", fontSize: 13, color: "#6B7280", fontWeight: 500 }}>Start over</button>
+        </div>
       </div>
       <AnalysisCard reasoning={reasoning} signals={signals} tier={tier} onOverride={onOverride} gtmOpportunities={gtmOpportunities} narrativeAngles={narrativeAngles} creativeHooks={creativeHooks} risks={risks} />
       <ExportToNotion
@@ -513,11 +536,45 @@ function LoadingState({ isNotion }) {
   );
 }
 
+function encodeShareData(data) {
+  try {
+    const json = JSON.stringify(data);
+    return btoa(unescape(encodeURIComponent(json)));
+  } catch { return null; }
+}
+
+function decodeShareData(encoded) {
+  try {
+    const json = decodeURIComponent(escape(atob(encoded)));
+    return JSON.parse(json);
+  } catch { return null; }
+}
+
+function buildShareUrl(data) {
+  const encoded = encodeShareData(data);
+  if (!encoded) return null;
+  return `${window.location.origin}/api/share?tier=${encodeURIComponent(data.tier)}&name=${encodeURIComponent(data.featureName)}&r=${encodeURIComponent(encoded)}`;
+}
+
+function updateBrowserUrl(data) {
+  const encoded = encodeShareData(data);
+  if (encoded) window.history.replaceState(null, "", `#${encoded}`);
+}
+
+function loadFromUrl() {
+  const hash = window.location.hash.slice(1);
+  if (hash) {
+    const decoded = decodeShareData(hash);
+    if (decoded?.tier && decoded?.featureName) return decoded;
+  }
+  return null;
+}
+
 export default function App() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState(loadFromUrl);
 
   const inputIsNotion = isNotionUrl(input);
   const hasInput = input.trim().length > 0;
@@ -575,7 +632,7 @@ export default function App() {
     setError(null);
     try {
       const parsed = inputIsNotion ? await analyzeNotionUrl() : await analyzeText();
-      setResult({
+      const resultData = {
         tier: parsed.tier,
         featureName: parsed.featureName || "Untitled Launch",
         reasoning: parsed.reasoning || "",
@@ -584,7 +641,9 @@ export default function App() {
         narrativeAngles: parsed.narrativeAngles || [],
         creativeHooks: parsed.creativeHooks || [],
         risks: parsed.risks || [],
-      });
+      };
+      setResult(resultData);
+      updateBrowserUrl(resultData);
     } catch (err) {
       console.error("Analysis error:", err);
       setError(inputIsNotion
@@ -616,8 +675,14 @@ export default function App() {
           creativeHooks={result.creativeHooks}
           risks={result.risks}
           originalMrd={input}
-          onReset={() => { setInput(""); setResult(null); setError(null); }}
-          onOverride={(t) => setResult((p) => ({ ...p, tier: t }))}
+          onReset={() => { setInput(""); setResult(null); setError(null); window.history.replaceState(null, "", window.location.pathname); }}
+          onOverride={(t) => {
+            setResult((p) => {
+              const updated = { ...p, tier: t };
+              updateBrowserUrl(updated);
+              return updated;
+            });
+          }}
         />
       </div>
     );
