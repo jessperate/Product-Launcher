@@ -166,6 +166,14 @@ const NotionIcon = () => (
   </svg>
 );
 
+const AsanaIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <circle cx="8" cy="5.5" r="2.8" fill="#F06A6A"/>
+    <circle cx="4" cy="11" r="2.8" fill="#F06A6A"/>
+    <circle cx="12" cy="11" r="2.8" fill="#F06A6A"/>
+  </svg>
+);
+
 function TierBadge({ tier }) {
   const d = TIER_DATA[tier];
   return (
@@ -325,7 +333,7 @@ function ExportToNotion({ tier, featureName, reasoning, signals, gtmOpportunitie
 
   if (exported) {
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", borderRadius: 10, background: "#F0FDF4", border: "1px solid #BBF7D0", marginBottom: 24 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", borderRadius: 10, background: "#F0FDF4", border: "1px solid #BBF7D0" }}>
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
           <path d="M15 5.25L7.5 12.75L3 8.25" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
@@ -342,7 +350,7 @@ function ExportToNotion({ tier, featureName, reasoning, signals, gtmOpportunitie
   }
 
   return (
-    <div style={{ marginBottom: 24 }}>
+    <div>
       {exportError && (
         <div style={{ padding: "10px 14px", borderRadius: 8, background: "#FEF2F2", border: "1px solid #FECACA", color: "#DC2626", fontSize: 13, marginBottom: 10, lineHeight: 1.4 }}>
           {exportError}
@@ -368,6 +376,97 @@ function ExportToNotion({ tier, featureName, reasoning, signals, gtmOpportunitie
         ) : (
           <>
             <NotionIcon /> Export to Notion
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
+
+function ExportToAsana({ tier, featureName, steps }) {
+  const [exporting, setExporting] = useState(false);
+  const [exported, setExported] = useState(null);
+  const [exportError, setExportError] = useState(null);
+
+  const handleExport = async () => {
+    setExporting(true);
+    setExportError(null);
+    try {
+      const sections = steps.map((step) => ({
+        name: step.title,
+        tasks: step.items,
+      }));
+      const response = await fetch("/api/asana-export", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectName: `${featureName} - Launch Plan (${TIER_DATA[tier].name})`,
+          sections,
+        }),
+      });
+
+      const resData = await response.json();
+
+      if (!response.ok) {
+        setExportError(resData.error || "Could not create the Asana project.");
+      } else if (resData.success && resData.url) {
+        setExported(resData.url);
+      } else {
+        setExported("created");
+      }
+    } catch (err) {
+      console.error("Asana export error:", err);
+      setExportError("Something went wrong exporting to Asana. Please try again.");
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  if (exported) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", borderRadius: 10, background: "#F0FDF4", border: "1px solid #BBF7D0" }}>
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M15 5.25L7.5 12.75L3 8.25" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        <span style={{ fontSize: 14, color: "#059669", fontWeight: 500 }}>
+          Created in Asana!
+        </span>
+        {exported !== "created" && (
+          <a href={exported} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: "#2563EB", fontWeight: 500, marginLeft: "auto" }}>
+            Open project &rarr;
+          </a>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      {exportError && (
+        <div style={{ padding: "10px 14px", borderRadius: 8, background: "#FEF2F2", border: "1px solid #FECACA", color: "#DC2626", fontSize: 13, marginBottom: 10, lineHeight: 1.4 }}>
+          {exportError}
+        </div>
+      )}
+      <button
+        onClick={handleExport}
+        disabled={exporting}
+        style={{
+          padding: "10px 18px", borderRadius: 10, border: "1px solid #E5E7EB",
+          background: exporting ? "#F9FAFB" : "#fff",
+          color: exporting ? "#9CA3AF" : "#374151",
+          fontWeight: 600, fontSize: 14,
+          cursor: exporting ? "not-allowed" : "pointer",
+          display: "flex", alignItems: "center", gap: 8, transition: "all 0.15s",
+        }}
+      >
+        {exporting ? (
+          <>
+            <div style={{ width: 16, height: 16, borderRadius: "50%", border: "2px solid #E5E7EB", borderTopColor: "#F06A6A", animation: "spin 0.8s linear infinite" }} />
+            Creating project...
+          </>
+        ) : (
+          <>
+            <AsanaIcon /> Create Asana Project
           </>
         )}
       </button>
@@ -477,19 +576,26 @@ function Results({ tier, featureName, reasoning, signals, gtmOpportunities, narr
         </div>
       </div>
       <AnalysisCard reasoning={reasoning} signals={signals} tier={tier} onOverride={onOverride} gtmOpportunities={gtmOpportunities} narrativeAngles={narrativeAngles} creativeHooks={creativeHooks} risks={risks} />
-      <ExportToNotion
-        tier={tier}
-        featureName={featureName}
-        reasoning={reasoning}
-        signals={signals}
-        gtmOpportunities={gtmOpportunities}
-        narrativeAngles={narrativeAngles}
-        creativeHooks={creativeHooks}
-        risks={risks}
-        originalMrd={originalMrd}
-        data={data}
-        steps={steps}
-      />
+      <div style={{ display: "flex", gap: 12, marginBottom: 24, flexWrap: "wrap" }}>
+        <ExportToNotion
+          tier={tier}
+          featureName={featureName}
+          reasoning={reasoning}
+          signals={signals}
+          gtmOpportunities={gtmOpportunities}
+          narrativeAngles={narrativeAngles}
+          creativeHooks={creativeHooks}
+          risks={risks}
+          originalMrd={originalMrd}
+          data={data}
+          steps={steps}
+        />
+        <ExportToAsana
+          tier={tier}
+          featureName={featureName}
+          steps={steps}
+        />
+      </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12, marginBottom: 24 }}>
         {[
